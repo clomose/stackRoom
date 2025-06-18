@@ -1,5 +1,6 @@
 import { Workspace } from "../model/workspace.model.js"
 import { Project } from "../model/project.model.js";
+import { Member } from "../model/member.model.js";
 
 export const isWorkspaceOwner = async (req, res, next) => {
   try {
@@ -32,7 +33,7 @@ export const isWorkspaceOwner = async (req, res, next) => {
   }
 };
 
-export const hasWorkspaceAccess = (roles) => { // here roles is a array
+export const hasAccess = (roles) => { // here roles is a array
     return async(req,res,next) => {
         const workspace = await Workspace.findById(req.params.workspaceId);
         if(!workspace) return res.status(404).json({msg:"WorkSpace not found",error : true});
@@ -42,7 +43,7 @@ export const hasWorkspaceAccess = (roles) => { // here roles is a array
             return next();
         }
 
-        const member = workspace.members.find((x) => c.user.toString() === req.user.id);
+        const member = await Member.findOne({workspace : workspace._id,user : req.user._id});
 
         if(!member || roles.include(member.role)){
             return res.status(403).json({ message: 'Access denied',error:true });

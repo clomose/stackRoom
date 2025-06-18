@@ -16,6 +16,7 @@ const fileSchema = new mongoose.Schema({
     },
     language:{
         type:String,
+        enum : ['javascript', 'python', 'java', 'cpp', 'html', 'css'],
         default:'javascript'
     }
 },{timestamps: true})
