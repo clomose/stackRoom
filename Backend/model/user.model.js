@@ -24,24 +24,7 @@ const userSchema = new mongoose.Schema({
     googleId : {
         type: String
     },
-    workspaces : [{
-        
-        workspaceId : {
-            type : mongoose.Schema.Types.ObjectId,
-            ref : "Workspace"
-        },
-        role : {
-            type : String,
-            enum : ['owner','editor','viewer'],
-            required: true
-        }
-    }],
-    project : [{
-        type : mongoose.Schema.Types.ObjectId,
-        ref : 'Project'
-    }],
-
-    
+     
 },{
     timestamps : true,  // Automatically adds createdAt and updatedAt fields
 })

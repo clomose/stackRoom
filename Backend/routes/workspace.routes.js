@@ -5,10 +5,12 @@ import { isWorkspaceOwner } from "../middlewares/authorization.middleware.js";
 
 const router = Router();
 
-router.post('/',authCheck,createWorkspace);
-router.put('/:workspaceId',authCheck,isWorkspaceOwner,editWorkspace);
-router.get('/',authCheck,getMyWorkspaces);
-router.delete('/:workspaceId',authCheck,isWorkspaceOwner,deletWorkspace);
-router.post('/:workspaceId/add',authCheck,isWorkspaceOwner,addMembers);
+router.use(authCheck);
+
+router.post('/',createWorkspace);
+router.put('/:workspaceId',isWorkspaceOwner,editWorkspace);
+router.get('/',getMyWorkspaces);
+router.delete('/:workspaceId',isWorkspaceOwner,deletWorkspace);
+router.post('/:workspaceId/add',isWorkspaceOwner,addMembers);
 
 export default router

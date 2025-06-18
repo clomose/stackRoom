@@ -1,7 +1,10 @@
 import { Workspace } from "../model/workspace.model.js"
+import { Project } from "../model/project.model.js";
 
 export const isWorkspaceOwner = async (req, res, next) => {
   try {
+    const {workspaceId} = req.params
+    console.log(workspaceId);
     const workspace = await Workspace.findById(req.params.workspaceId);
     if (!workspace) {
       return res.status(404).json({
@@ -51,4 +54,27 @@ export const hasWorkspaceAccess = (roles) => { // here roles is a array
         
     }
 
+}
+
+export const validProject = async(req,res,next) => {
+  try {
+    const projectId = req.params.projectId;
+    const project = await Project.findById(projectId);
+    if (!project) {
+      return res.status(404).json({
+        msg: "Project not found",
+        error: true,
+      });
+    }
+
+    req.project = project;
+    next()
+
+  } catch (error) {
+    console.error("Error in Valid middleware:", error);
+    res.status(500).json({
+      msg: "Server Error",
+      error: true,
+    });
+  }
 }

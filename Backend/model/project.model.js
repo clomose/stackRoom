@@ -14,19 +14,6 @@ const projectSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
     },
-    collaborators: [
-        {
-            user : {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'User'
-            },
-            role:{
-                type: String,
-                enum: ['editor', 'viewer'],
-                default: 'editor',
-            }
-        }
-    ]
 },{timestamps: true})
 
 export const Project = mongoose.model('Project',projectSchema);
