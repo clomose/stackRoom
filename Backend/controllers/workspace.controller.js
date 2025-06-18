@@ -1,4 +1,5 @@
 import { Workspace } from "../model/workspace.model.js";
+import { Member } from "../model/member.model.js";
 
 const createWorkspace = async (req,res) => {
     const {name} = req.body;
@@ -7,18 +8,19 @@ const createWorkspace = async (req,res) => {
     const workspace = await Workspace.create({
         name,
         owner: user._id,
-        members : [
-            {
-                user: user._id,
-                role: 'editor'  //owner is the first editor
-            }
-        ]
     })
 
     if(!workspace) return res.status(500).json({msg : "Internal Server Error",error: true});
     
+    const member = await Member.create({
+        workspace : workspace._id,
+        user : user._id,
+        role : "owner"
+        
+    })
+
     res.status(201).json({
-        msg : "Worksapce created successfully",
+        msg : "Workspace created successfully",
         error : false,
         data : workspace
     })
@@ -63,15 +65,22 @@ const addMembers = async(req,res) => {
         const {users} = req.body;  // here users is a array of userId and there roles
         const workspace = req.workspace;
 
-        for(const {userId,role} of users){
-            const existingUser = workspace.members.find((value) => value.user.toString() === userId);
-            if(!existingUser){
-                workspace.members.push({user:userId,role});
-            }
-        }
+        const existingUsers = await Member.find({
+            workspace : workspace._id,
+            user : { $in : users.map(u => u.userId) }
+        })
 
-        await workspace.save();
+        const existingUserIds = new Set(existingUsers.map(u => u.user.toString()));
+        const newMembers = users.filter(u => !existingUserIds.has(u.userId));
 
+        if (newMembers.length > 0) {
+            await Member.insertMany(
+                newMembers.map(({ userId, role }) => ({
+                user: userId,
+                role,
+                workspace: workspace._id,
+            }))
+        )}
         res.status(200).json({
         msg: 'Members added successfully',
         error: false,
