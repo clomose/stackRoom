@@ -90,4 +90,17 @@ const getAllFiles = async(req,res) => {
     }
 }
 
-export {createFile,updateFile,deleteFile}
+const getFileById = async(req,res) => {
+    try {
+        const {fileId} = req.params;
+        const file = await File.findById(fileId);
+        if(!file) return res.status(404).json({msg:"File Not found",error:true});
+    
+        res.status(201).json({msg:"File",error:false,data:file});
+    } catch (error) {
+        console.log("Error While finding file",error);
+        res.status(500).json({ msg: "Error While finding file", error: true });
+    }
+}
+
+export {createFile,updateFile,deleteFile,getAllFiles,getFileById}

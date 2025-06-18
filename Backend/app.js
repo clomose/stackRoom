@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import authRoute from './routes/auth.routes.js'
 import workspaceRoute from './routes/workspace.routes.js'
 import projectRoutes from './routes/project.routes.js';
+import fileRoutes from './routes/file.routes.js'
 import passport from 'passport';
 import session from 'express-session';
 
@@ -40,6 +41,9 @@ app.use('/api/workspace',workspaceRoute);
 
 //project route
 app.use('/api/workspace/:workspaceId/projects', projectRoutes);
+
+//file routes
+app.use('/api/workspace/:workspaceId/projects/:projectId/files', fileRoutes);
 
 
 export default app;
