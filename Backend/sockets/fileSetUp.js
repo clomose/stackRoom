@@ -10,6 +10,8 @@ export const fileSetUp = (io,socket) => {
         currentFileRoom = room
         socket.join(room);
         socket.to(room).emit("user-joined-file",user);
+
+        socket.to(room).emit("request-latest-code",{newSocketId : socket.id})
     })
 
     socket.on("code-change",({ workspaceId, projectId, fileId, code }) => {
@@ -30,6 +32,10 @@ export const fileSetUp = (io,socket) => {
             timestamp: Date.now(),
         })
     });
+
+    socket.on("send-code-to-new-user",({sockedId,code})=> {
+        io.to(socketId).emit("code-change",{code})
+    })
 
     socket.on("file-create",({ workspaceId, projectId, newFile }) => {
         const projectRoom = `${workspaceId}:${projectId}`;
