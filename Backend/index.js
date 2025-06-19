@@ -2,6 +2,7 @@ import app from "./app.js";
 import connectDB from './db/index.js';
 import http from 'http';
 import { Server } from 'socket.io';
+import { initSocket } from "./sockets/socketManager.js";
 
 //socket
 const server = http.createServer(app);
@@ -12,6 +13,8 @@ const io = new Server(server,{
         credentials : true,
     }
 })
+
+initSocket(io);
 
 connectDB().then(() => {
     app.listen(5000,() => {
