@@ -30,7 +30,7 @@ const Navbar = () => {
         {/* User Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Avatar className="hover:cursor-pointer">
+            <Avatar className="cursor-pointer">
               <AvatarImage src="https://github.com/shadcn.png" alt="User" />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
