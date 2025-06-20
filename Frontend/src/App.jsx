@@ -1,11 +1,15 @@
 import React from 'react'
+import { Button } from './components/ui/button'
+import Logo from './pages/home/Logo'
+import Navbar from './pages/home/Navbar'
 
 function App() {
 
   return (
-    <div className='min-h-screen'>
+    <>
+      <Navbar></Navbar>
+    </>
       
-    </div>
   )
 }
 
